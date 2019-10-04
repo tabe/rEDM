@@ -59,10 +59,10 @@
 #'   \code{perc} \tab percent correct sign\cr
 #'   \code{p_val} \tab p-value that rho is significantly greater than 0 using 
 #'     Fisher's z-transformation\cr
-#'   \code{const_rho} \tab same as \code{rho}, but for the constant predictor\cr
-#'   \code{const_mae} \tab same as \code{mae}, but for the constant predictor\cr
-#'   \code{const_rmse} \tab same as \code{rmse}, but for the constant predictor\cr
-#'   \code{const_perc} \tab same as \code{perc}, but for the constant predictor\cr
+#'   \code{const_pred_rho} \tab same as \code{rho}, but for the constant predictor\cr
+#'   \code{const_pred_mae} \tab same as \code{mae}, but for the constant predictor\cr
+#'   \code{const_pred_rmse} \tab same as \code{rmse}, but for the constant predictor\cr
+#'   \code{const_pred_perc} \tab same as \code{perc}, but for the constant predictor\cr
 #'   \code{const_p_val} \tab same as \code{p_val}, but for the constant predictor\cr
 #'   \code{model_output} \tab data.frame with columns for the time index, 
 #'     observations, predictions, and estimated prediction variance
@@ -129,11 +129,14 @@ simplex <- function(time_series, lib = c(1, NROW(time_series)), pred = lib,
     output <- lapply(seq(NROW(params)), function(i) {
         model$set_params(params$E[i], params$tau[i], params$tp[i], params$nn[i])
         model$run()
-        if (stats_only)
+        if (silent)
         {
-            df <- model$get_stats()
+            suppressWarnings( df <- model$get_stats() )
         } else {
-            df <- model$get_stats()
+            df <- model$get_stats() 
+        }
+        if (!stats_only)
+        {
             df$model_output <- I(list(model$get_output()))
         }
         return(df)
@@ -227,11 +230,14 @@ s_map <- function(time_series, lib = c(1, NROW(time_series)), pred = lib,
         model$set_params(params$E[i], params$tau[i], params$tp[i], params$nn[i])
         model$set_theta(params$theta[i])
         model$run()
-        if (stats_only)
+        if (silent)
         {
-            df <- model$get_stats()
+            suppressWarnings( df <- model$get_stats() )
         } else {
-            df <- model$get_stats()
+            df <- model$get_stats() 
+        }
+        if (!stats_only)
+        {
             df$model_output <- I(list(model$get_output()))
             if (save_smap_coefficients)
             {
