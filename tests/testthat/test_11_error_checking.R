@@ -3,14 +3,11 @@ context("Check various warning messages and input checking")
 data("two_species_model")
 ts <- two_species_model$x[1:200]
 
-<<<<<<< HEAD
-=======
 test_that("silent = TRUE works", {
     expect_error(w <- capture_warnings(simplex(rep(1, 100), silent = TRUE)), NA)
     expect_identical(w, character(0))
 })
 
->>>>>>> upstream/master
 test_that("end of range checking works", {
     expect_error(w <- capture_warnings(simplex_out <- simplex(ts, lib = c(1, 201), E = 1)), NA)
     expect_match(w, "end_of_range = 201, but num_vectors = 200", all = FALSE)
@@ -24,13 +21,10 @@ test_that("beginning of range checking works", {
     expect_match(w, "start_of_range = 201, but num_vectors = 200", all = FALSE)
     expect_match(w, "start of time_range was greater than the number of vectors; skipping", all = FALSE)
     expect_match(w, "no nearest neighbors found; using NA for forecast", all = FALSE)
-<<<<<<< HEAD
-=======
     simplex_out$rho <- NaN
     simplex_out$p_val <- NaN
     simplex_out$const_pred_rho <- NaN
     simplex_out$const_p_val <- NaN
->>>>>>> upstream/master
     expect_known_hash(round(simplex_out, 4), "e5b3bb5459")
 })
 
